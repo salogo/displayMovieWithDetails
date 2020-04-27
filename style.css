@@ -1,0 +1,16 @@
+img {
+    height: 100px;
+    width: 100px;
+   
+}
+body{
+    background-color: blueviolet;
+}
+div .box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.buttonColor{
+    background-color: chocolate;
+}

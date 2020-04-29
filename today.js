@@ -1,46 +1,76 @@
-// http://www.omdbapi.com/?s=superman&apikey=564727fa
-// s and apiKey are called query strings 
-
-let moviesList = document.getElementById("moviesList")
 let ul = document.getElementById("ul")
-let movieDetails =document.getElementById("movieDetails")
 
 let request = new XMLHttpRequest() 
-/*// OPTION 1
-request.addEventListener('load',function() {
-}) */
-let press = function(url){
-    let requestDetails = new XMLHttpRequest() 
-    requestDetails.onload = function(){
-        let result = JSON.parse(this.responseText)
-        console.log(result)
-        
-let detailsHtml = `<h1>${result.Title}</h1>
-                   <p>${result.Plot}</p>
-`
-movieDetails.innerHTML = detailsHtml
-    }
-requestDetails.open("GET", url)
-requestDetails.send()
-console.log(url)
-}
-// OPTION 2
-request.onload = function() {
-    // parse the text as JavaScript Object
-    let result = JSON.parse(this.responseText)
-//console.log(result)
-    let liItems = result.Search.map((movie) => { 
-        let urlId = `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=e536cca7`
 
-                return `   <li> 
-                <b> <p>${movie.Title} </p></b>
-                <button class="buttonColor" onclick="press('${urlId}')">Details</button>
-                <img src=${movie.Poster} />
-                </li>  `            
-    })
-    // converting liItems array to a string and then assigning to the ul
+request.onload = function() {
+    let result = JSON.parse(this.responseText)
+
+    let liItems = Object.keys(result).map(function(coffee) { 
+        console.log(result[coffee].coffee)
+        console.log(result[coffee].emailAddress)
+
+        return `<li>
+        <label> ${result[coffee].coffee}</label>
+        <p>${result[coffee].emailAddress} </p>
+
+        </li>
+        `
+
+            })
     ul.innerHTML = liItems.join(" ")
-    console.log(liItems)
 }
-request.open("GET","http://www.omdbapi.com/?s=batman&apikey=e536cca7")
+request.open("GET","https://dc-coffeerun.herokuapp.com/api/coffeeorders/")
 request.send() 
+
+let emailTexBox =document.getElementById("emailTexBox")
+let button =document.getElementById("button")
+let coffeeTexBox =document.getElementById("coffeeTexBox")
+let h1 =document.getElementById("h1")
+let requestt = new XMLHttpRequest() 
+
+
+let new_order = button.addEventListener("click",function(){
+    console.log("hikk")
+    let email = {
+        emailAddress: emailTexBox.value, 
+        coffee :coffeeTexBox.value
+    }
+    
+requestt.open("POST","https://dc-coffeerun.herokuapp.com/api/coffeeorders/")
+requestt.setRequestHeader("Content-Type","application/json")
+requestt.send(JSON.stringify(email))
+h1.innerHTML = button.value
+})
+
+
+console.log(new_order)
+//console.log(JSON.stringify(order))
+//requestt.send(JSON.stringify(order))
+let deleteByEmail= document.getElementById("deleteByEmail")
+let deletButton= document.getElementById("deletButton")
+
+   deletButton.addEventListener("click", function() {
+    
+    let requesttt = new XMLHttpRequest()
+    requesttt.onload = function() {
+        console.log(this.responseText)
+    }
+    console.log(deleteByEmail.value)
+    requesttt.open("DELETE",`https://dc-coffeerun.herokuapp.com/api/coffeeorders/${deleteByEmail.value}`)
+    requesttt.setRequestHeader("Content-Type","application/json")
+    requesttt.send()
+})
+
+let searchByEmail = document.getElementById("searchByEmail")
+let searchButton = document.getElementById("searchButton")
+
+searchButton.addEventListener("click", function(){
+    let requestx = new XMLHttpRequest()
+    requestx.onload = function() {
+        console.log("ff",this.responseText)
+    }
+console.log(deleteByEmail.value)
+requestx.open("GET",`https://dc-coffeerun.herokuapp.com/api/coffeeorders/${searchButton.value}`)
+requestx.setRequestHeader("Content-Type","application/json")
+requestx.send()
+})
